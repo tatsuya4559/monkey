@@ -122,6 +122,7 @@ func (l *Lexer) readIdentifier() string {
 
 func (l *Lexer) readNumber() string {
 	position := l.position
+	// FIXME: EOFに達したとき、chが0になっているので無限ループする
 	for isDigit(l.ch) {
 		l.readChar()
 	}

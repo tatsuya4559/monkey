@@ -17,7 +17,7 @@ func New(input string) *Lexer {
 
 func (l *Lexer) readChar() {
 	if l.readPosition >= len(l.input) {
-		l.ch = '0'
+		l.ch = 0
 	} else {
 		l.ch = l.input[l.readPosition]
 	}
@@ -73,7 +73,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':
 		tok = newToken(token.RBRACE, l.ch)
-	case '0':
+	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
 	default:
@@ -122,7 +122,6 @@ func (l *Lexer) readIdentifier() string {
 
 func (l *Lexer) readNumber() string {
 	position := l.position
-	// FIXME: EOFに達したとき、chが0になっているので無限ループする
 	for isDigit(l.ch) {
 		l.readChar()
 	}

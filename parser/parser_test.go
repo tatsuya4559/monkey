@@ -350,6 +350,18 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 			"!(true == true)",
 			"(!(true == true))",
 		},
+		{
+			"a + add(b * c) + d",
+			"((a + add((b * c))) + d)",
+		},
+		{
+			"add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
+			"add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
+		},
+		{
+			"add(a + b + c * d / f + g)",
+			"add((((a + b) + ((c * d) / f)) + g))",
+		},
 	}
 
 	for _, tt := range tests {
@@ -629,7 +641,7 @@ func TestFunctionLiteralParsing(t *testing.T) {
 
 func TestFunctionParameterParsing(t *testing.T) {
 	tests := []struct {
-		input string
+		input          string
 		expectedParams []string
 	}{
 		{input: "fn() {}", expectedParams: []string{}},
@@ -654,6 +666,75 @@ func TestFunctionParameterParsing(t *testing.T) {
 
 		for i, ident := range function.Parameters {
 			testLiteralExpression(t, ident, tt.expectedParams[i])
+		}
+	}
+}
+
+func TestCallExpressionParsing(t *testing.T) {
+	input := `add(1, 2 * 3, 4 + 5);`
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program has not enough statements. got=%d",
+			len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not *ast.ExpressionStatement. got=%T",
+			program.Statements[0])
+	}
+
+	expr, ok := stmt.Expression.(*ast.CallExpression)
+	if !ok {
+		t.Fatalf("stmt.Expression not *ast.CallExpression. got=%T",
+			stmt.Expression)
+	}
+
+	if !testIdentifer(t, expr.Function, "add") {
+		return
+	}
+
+	if len(expr.Arguments) != 3 {
+		t.Fatalf("wrong length of arguments. got=%d", len(expr.Arguments))
+	}
+
+	testLiteralExpression(t, expr.Arguments[0], 1)
+	testInfixExpression(t, expr.Arguments[1], 2, "*", 3)
+	testInfixExpression(t, expr.Arguments[2], 4, "+", 5)
+}
+
+func TestCallExpressionArgumentParsing(t *testing.T) {
+	tests := []struct {
+		input        string
+		expectedArgs []string
+	}{
+		{input: `exit();`, expectedArgs: []string{}},
+		{input: `print(x)`, expectedArgs: []string{"x"}},
+		{input: `add(x, y, z)`, expectedArgs: []string{"x", "y", "z"}},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		// do not check type conversion. it is tested above.
+		stmt := program.Statements[0].(*ast.ExpressionStatement)
+		expr := stmt.Expression.(*ast.CallExpression)
+
+		if len(expr.Arguments) != len(tt.expectedArgs) {
+			t.Errorf("wrong length of arguments. want %d, got=%d",
+				len(tt.expectedArgs), len(expr.Arguments))
+		}
+
+		for i, ident := range expr.Arguments {
+			testLiteralExpression(t, ident, tt.expectedArgs[i])
 		}
 	}
 }

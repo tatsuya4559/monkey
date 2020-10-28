@@ -23,10 +23,10 @@ const (
 	SLASH    = "/"
 	BANG     = "!"
 
-	EQ = "=="
+	EQ     = "=="
 	NOT_EQ = "!="
-	LT = "<"
-	GT = ">"
+	LT     = "<"
+	GT     = ">"
 
 	// delimiter
 	COMMA     = ","

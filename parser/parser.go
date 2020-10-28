@@ -322,7 +322,6 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		expr.Alternative = p.parseBlockStatement()
 	}
 
-
 	return expr
 }
 

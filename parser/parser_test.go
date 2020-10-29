@@ -85,8 +85,8 @@ func checkParserErrors(t *testing.T, p *Parser) {
 }
 
 func TestReturnStatements(t *testing.T) {
-	tests := []struct{
-		input string
+	tests := []struct {
+		input         string
 		expectedValue interface{}
 	}{
 		{`return 5;`, 5},

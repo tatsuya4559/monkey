@@ -484,7 +484,7 @@ func TestBooleanExpression(t *testing.T) {
 func testBooleanLiteral(t *testing.T, expr ast.Expression, value bool) bool {
 	b, ok := expr.(*ast.Boolean)
 	if !ok {
-		t.Errorf("il not *ast.Boolean. got=%T", expr)
+		t.Errorf("expr not *ast.Boolean. got=%T", expr)
 		return false
 	}
 	if b.Value != value {
@@ -771,7 +771,7 @@ func TestStringLiteralExpression(t *testing.T) {
 
 	str, ok := stmt.Expression.(*ast.StringLiteral)
 	if !ok {
-		t.Fatalf("il not *ast.StringLiteral. got=%T", stmt.Expression)
+		t.Fatalf("expr not *ast.StringLiteral. got=%T", stmt.Expression)
 	}
 	if str.Value != "hello world" {
 		t.Errorf("str.Value not %s. got=%s", "hello world", str.Value)

@@ -366,9 +366,19 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`first([])`, nil},
 		{`first([1, 2])`, 1},
 		{`first([2 * 3, 4 + 5 + 6])`, 6},
+		{`first(1)`, "argument to `first` must be ARRAY, got INTEGER"},
+		{`first("one", "two")`, "wrong number of arguments. want=1, got=2"},
 		{`last([])`, nil},
 		{`last([1, 2])`, 2},
 		{`last([2 * 3, 4 + 5 + 6, 7 + 8])`, 15},
+		{`last(1)`, "argument to `last` must be ARRAY, got INTEGER"},
+		{`last("one", "two")`, "wrong number of arguments. want=1, got=2"},
+		{`rest([])`, nil},
+		{`rest([1])`, []int{}},
+		{`rest([1, 2])`, []int{2}},
+		{`rest([2 * 3, 4 + 5 + 6, 7 + 8])`, []int{15, 15}},
+		{`rest(1)`, "argument to `rest` must be ARRAY, got INTEGER"},
+		{`rest("one", "two")`, "wrong number of arguments. want=1, got=2"},
 	}
 
 	for _, tt := range tests {
@@ -387,10 +397,31 @@ func TestBuiltinFunctions(t *testing.T) {
 				t.Errorf("wrong error message. want=%q, got=%q",
 					expected, errObj.Message)
 			}
+		case []int:
+			testArrayObject(t, evaluated, expected)
 		default:
 			testNullObject(t, evaluated)
 		}
 	}
+}
+
+func testArrayObject(t *testing.T, obj object.Object, expected []int) bool {
+	arr, ok := obj.(*object.Array)
+	if !ok {
+		t.Errorf("object is not ARRAY. got=%T (%+v)", obj, obj)
+		return false
+	}
+	if len(arr.Elements) != len(expected) {
+		t.Errorf("wrong number of elements. want=%d, got=%d",
+			len(expected), len(arr.Elements))
+		return false
+	}
+	for i, e := range arr.Elements {
+		if !testIntegerObject(t, e, int64(expected[i])) {
+			return false
+		}
+	}
+	return true
 }
 
 func TestArrayLiteral(t *testing.T) {

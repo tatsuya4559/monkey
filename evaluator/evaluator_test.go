@@ -366,6 +366,9 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`first([])`, nil},
 		{`first([1, 2])`, 1},
 		{`first([2 * 3, 4 + 5 + 6])`, 6},
+		{`last([])`, nil},
+		{`last([1, 2])`, 2},
+		{`last([2 * 3, 4 + 5 + 6, 7 + 8])`, 15},
 	}
 
 	for _, tt := range tests {

@@ -5,8 +5,9 @@ import "github.com/tatsuya4559/monkey/object"
 var builtins = map[string]*object.Builtin{
 	"len":   {Fn: _len},
 	"first": {Fn: _first},
-	"last": {Fn: _last},
-	"rest": {Fn: _rest},
+	"last":  {Fn: _last},
+	"rest":  {Fn: _rest},
+	"push":  {Fn: _push},
 }
 
 func _len(args ...object.Object) object.Object {
@@ -75,4 +76,23 @@ func _rest(args ...object.Object) object.Object {
 		return &object.Array{Elements: newElements}
 	}
 	return NULL
+}
+
+func _push(args ...object.Object) object.Object {
+	if len(args) != 2 {
+		return newError("wrong number of arguments. want=2, got=%d", len(args))
+	}
+	if args[0].Type() != object.ARRAY_OBJ {
+		return newError("first argument to `push` must be ARRAY, got %s",
+			args[0].Type())
+	}
+
+	arr := args[0].(*object.Array)
+	length := len(arr.Elements)
+
+	newElements := make([]object.Object, length+1, length+1)
+	copy(newElements, arr.Elements)
+	newElements[length] = args[1]
+
+	return &object.Array{Elements: newElements}
 }

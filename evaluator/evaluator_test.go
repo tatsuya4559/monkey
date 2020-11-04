@@ -363,6 +363,9 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`len([])`, 0},
 		{`len(["foo", "bar"])`, 2},
 		{`len([1, 2 * 3, 4 + 5 + 6, "foo"])`, 4},
+		{`first([])`, nil},
+		{`first([1, 2])`, 1},
+		{`first([2 * 3, 4 + 5 + 6])`, 6},
 	}
 
 	for _, tt := range tests {
@@ -381,6 +384,8 @@ func TestBuiltinFunctions(t *testing.T) {
 				t.Errorf("wrong error message. want=%q, got=%q",
 					expected, errObj.Message)
 			}
+		default:
+			testNullObject(t, evaluated)
 		}
 	}
 }

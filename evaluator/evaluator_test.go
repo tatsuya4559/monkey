@@ -550,7 +550,7 @@ func TestHashLiterals(t *testing.T) {
 
 func TestHashIndexExpression(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected interface{}
 	}{
 		{

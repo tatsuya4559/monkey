@@ -8,7 +8,7 @@ import (
 
 func TestQuote(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected string
 	}{
 		{
@@ -26,6 +26,48 @@ func TestQuote(t *testing.T) {
 		{
 			`quote(foobar + barfoo);`,
 			`(foobar + barfoo)`,
+		},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		quote, ok := evaluated.(*object.Quote)
+		if !ok {
+			t.Fatalf("object is not *object.Quote. got=%T (%+v)",
+				evaluated, evaluated)
+		}
+
+		if quote.Node == nil {
+			t.Fatalf("quote.Node is nil")
+		}
+
+		if quote.Node.String() != tt.expected {
+			t.Errorf("not equal. want=%q, got=%q",
+				tt.expected, quote.Node.String())
+		}
+	}
+}
+
+func TestQuoteUnquote(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{
+			`quote(unquote(4));`,
+			`4`,
+		},
+		{
+			`quote(unquote(4 + 3));`,
+			`7`,
+		},
+		{
+			`quote(5 + unquote(4 + 3));`,
+			`(5 + 7)`,
+		},
+		{
+			`quote(unquote(4 + 3) + 5);`,
+			`(7 + 5)`,
 		},
 	}
 

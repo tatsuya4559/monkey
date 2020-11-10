@@ -185,19 +185,9 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
 	case operator == "==":
-		leftEq, ok := left.(object.Equalable)
-		if !ok {
-			// compare pointer if not Equalable
-			return nativeBoolToBooleanObject(left == right)
-		}
-		return nativeBoolToBooleanObject(leftEq.EqualsTo(right))
+		return nativeBoolToBooleanObject(object.Equals(left, right))
 	case operator == "!=":
-		leftEq, ok := left.(object.Equalable)
-		if !ok {
-			// compare pointer if not Equalable
-			return nativeBoolToBooleanObject(left != right)
-		}
-		return nativeBoolToBooleanObject(!leftEq.EqualsTo(right))
+		return nativeBoolToBooleanObject(!object.Equals(left, right))
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:

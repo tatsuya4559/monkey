@@ -198,16 +198,8 @@ func (a *Array) EqualsTo(o Object) bool {
 	}
 
 	for i := range a.Elements {
-		lhs, ok := a.Elements[i].(Equalable)
-		if ok {
-			if !lhs.EqualsTo(other.Elements[i]) {
-				return false
-			}
-		} else {
-			// compare pointer if not Equalable
-			if a.Elements[i] != other.Elements[i] {
-				return false
-			}
+		if !Equals(a.Elements[i], other.Elements[i]) {
+			return false
 		}
 	}
 
@@ -285,4 +277,16 @@ func (m *Macro) Inspect() string {
 
 type Equalable interface {
 	EqualsTo(Object) bool
+}
+
+// Equals returns the equality of argumets.
+// Invoke `EqualsTo` if argumets implements Equalable,
+// otherwise compare pointers.
+func Equals(lhs, rhs Object) bool {
+	lhsEq, ok := lhs.(Equalable)
+	if ok {
+		return lhsEq.EqualsTo(rhs)
+	} else {
+		return lhs == rhs
+	}
 }

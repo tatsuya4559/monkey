@@ -240,6 +240,29 @@ func (h *Hash) Inspect() string {
 
 	return out.String()
 }
+func (h *Hash) EqualsTo(o Object) bool {
+	other, ok := o.(*Hash)
+	if !ok {
+		return false
+	}
+
+	if len(h.Pairs) != len(other.Pairs) {
+		return false
+	}
+
+	for hashKey, pair := range h.Pairs {
+		otherPair, ok := other.Pairs[hashKey]
+		if !ok {
+			return false
+		}
+		if !Equals(pair.Key, otherPair.Key) ||
+			!Equals(pair.Value, otherPair.Value) {
+			return false
+		}
+	}
+
+	return true
+}
 
 type Quote struct {
 	Node ast.Node

@@ -31,6 +31,7 @@ if (5 < 10) {
 [1, 2];
 {"foo": 12};
 macro(x, y) { x + y; };
+while (true) { puts("foo") };
 `
 
 	tests := []struct {
@@ -136,6 +137,17 @@ macro(x, y) { x + y; };
 		{token.PLUS, "+"},
 		{token.IDENT, "y"},
 		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
+		{token.WHILE, "while"},
+		{token.LPAREN, "("},
+		{token.TRUE, "true"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.IDENT, "puts"},
+		{token.LPAREN, "("},
+		{token.STRING, "foo"},
+		{token.RPAREN, ")"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},

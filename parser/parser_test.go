@@ -1143,3 +1143,45 @@ func TestMacroLiteralParsing(t *testing.T) {
 	}
 	testInfixExpression(t, bodyStmt.Expression, "x", "+", "y")
 }
+
+func TestWhileStatement(t *testing.T) {
+	input := `
+while (i < 10) {
+	let i = i * 2;
+}
+	`
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program has not enough statements. got=%d",
+			len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.WhileStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not *ast.WhileStatement. got=%T",
+			program.Statements[0])
+	}
+
+	if !testInfixExpression(t, stmt.Condition, "i", "<", 10) {
+		return
+	}
+
+	if len(stmt.Body.Statements) != 1 {
+		t.Errorf("body not 1 statements. got=%d",
+			len(stmt.Body.Statements))
+	}
+
+	if !testLetStatement(t, stmt.Body.Statements[0], "i") {
+		return
+	}
+
+	val := stmt.Body.Statements[0].(*ast.LetStatement).Value
+	if !testInfixExpression(t, val, "i", "*", 2) {
+		return
+	}
+}

@@ -187,6 +187,32 @@ func (a *Array) Inspect() string {
 
 	return out.String()
 }
+func (a *Array) EqualsTo(o Object) bool {
+	other, ok := o.(*Array)
+	if !ok {
+		return false
+	}
+
+	if len(a.Elements) != len(other.Elements) {
+		return false
+	}
+
+	for i := range a.Elements {
+		lhs, ok := a.Elements[i].(Equalable)
+		if ok {
+			if !lhs.EqualsTo(other.Elements[i]) {
+				return false
+			}
+		} else {
+			// compare pointer if not Equalable
+			if a.Elements[i] != other.Elements[i] {
+				return false
+			}
+		}
+	}
+
+	return true
+}
 
 type HashKey struct {
 	Type  ObjectType

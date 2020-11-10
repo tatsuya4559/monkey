@@ -116,6 +116,17 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{`"foo" == "foo"`, true},
 		{`"foobar" == "foo" + "bar"`, true},
 		{`"foo" != "bar"`, true},
+		{`[1, 2, 3] == [1, 2, 3]`, true},
+		{`[1, 1 * 2, 3] == [1, 2]`, false},
+		{`[1, 2, 1 + 2] == [1, 2, 4]`, false},
+		{`["foo", "bar"] == ["foo", "bar"]`, true},
+		{`["foo", "bar"] == ["foo"]`, false},
+		{`["foo", "bar"] == ["foo", "baz"]`, false},
+		{`["foo", "bar"] == []`, false},
+		{`[true, false] == [true, false]`, true},
+		{`[true, false] == [true]`, false},
+		{`[true, false] == [true, true]`, false},
+		{`[] == []`, true},
 	}
 
 	for _, tt := range tests {

@@ -184,14 +184,24 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
+	case operator == "==":
+		leftEq, ok := left.(object.Equalable)
+		if !ok {
+			// compare pointer if not Equalable
+			return nativeBoolToBooleanObject(left == right)
+		}
+		return nativeBoolToBooleanObject(leftEq.EqualsTo(right))
+	case operator == "!=":
+		leftEq, ok := left.(object.Equalable)
+		if !ok {
+			// compare pointer if not Equalable
+			return nativeBoolToBooleanObject(left != right)
+		}
+		return nativeBoolToBooleanObject(!leftEq.EqualsTo(right))
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right)
-	case operator == "==":
-		return nativeBoolToBooleanObject(left == right)
-	case operator == "!=":
-		return nativeBoolToBooleanObject(left != right)
 	case left.Type() != right.Type():
 		return newError("type mismatch: %s %s %s",
 			left.Type(), operator, right.Type())
@@ -218,10 +228,6 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":
 		return nativeBoolToBooleanObject(leftVal > rightVal)
-	case "==":
-		return nativeBoolToBooleanObject(leftVal == rightVal)
-	case "!=":
-		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
 		return newError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
@@ -238,10 +244,6 @@ func evalStringInfixExpression(
 	switch operator {
 	case "+":
 		return &object.String{Value: leftVal + rightVal}
-	case "==":
-		return nativeBoolToBooleanObject(leftVal == rightVal)
-	case "!=":
-		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
 		return newError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())

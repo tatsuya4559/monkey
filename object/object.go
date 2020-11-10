@@ -69,6 +69,13 @@ func (i *Integer) Inspect() string  { return fmt.Sprintf("%d", i.Value) }
 func (i *Integer) HashKey() HashKey {
 	return HashKey{Type: i.Type(), Value: uint64(i.Value)}
 }
+func (i *Integer) EqualsTo(o Object) bool {
+	other, ok := o.(*Integer)
+	if !ok {
+		return false
+	}
+	return i.Value == other.Value
+}
 
 type String struct {
 	Value string
@@ -81,6 +88,13 @@ func (s *String) HashKey() HashKey {
 	h.Write([]byte(s.Value))
 
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
+}
+func (s *String) EqualsTo(o Object) bool {
+	other, ok := o.(*String)
+	if !ok {
+		return false
+	}
+	return s.Value == other.Value
 }
 
 type Boolean struct {
@@ -241,4 +255,8 @@ func (m *Macro) Inspect() string {
 	out.WriteString("\n}")
 
 	return out.String()
+}
+
+type Equalable interface {
+	EqualsTo(Object) bool
 }

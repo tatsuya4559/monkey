@@ -49,7 +49,7 @@ const (
 	IF       = "if"
 	ELSE     = "else"
 	RETURN   = "return"
-	MACRO    = "MACRO"
+	MACRO    = "macro"
 )
 
 var keywords = map[string]TokenType{

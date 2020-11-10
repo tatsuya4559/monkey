@@ -25,7 +25,6 @@ let mymacro = macro(x, y) { x + y };
 			len(program.Statements))
 	}
 
-	
 	if _, ok := env.Get("number"); ok {
 		t.Fatalf("number should not be defined")
 	}
@@ -41,7 +40,7 @@ let mymacro = macro(x, y) { x + y };
 	if !ok {
 		t.Fatalf("object is not Macro. got=%T (%+v)", obj, obj)
 	}
-	
+
 	if len(macro.Parameters) != 2 {
 		t.Fatalf("wrong number of macro.Parameters. want=%d, got=%d",
 			2, len(macro.Parameters))
@@ -67,7 +66,7 @@ func testParseProgram(input string) *ast.Program {
 
 func TestExpandMacros(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected string
 	}{
 		{

@@ -55,6 +55,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return val
 		}
 		env.Set(node.Name.Value, val)
+	case *ast.WhileStatement:
+		return evalWhileStatement(node, env)
 	case *ast.BlockStatement:
 		return evalBlockStatement(node, env)
 	case *ast.IfExpression:
@@ -408,4 +410,30 @@ func evalHashIndexExpression(hash, index object.Object) object.Object {
 	}
 
 	return pair.Value
+}
+
+func evalWhileStatement(
+	ws *ast.WhileStatement,
+	env *object.Environment,
+) object.Object {
+	var result object.Object
+
+	condition := Eval(ws.Condition, env)
+	if isError(condition) {
+		return condition
+	}
+
+	for isTruthy(condition) {
+		result = Eval(ws.Body, env)
+		if isError(result) {
+			return result
+		}
+
+		condition = Eval(ws.Condition, env)
+		if isError(condition) {
+			return condition
+		}
+	}
+
+	return result
 }

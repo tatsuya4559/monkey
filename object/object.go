@@ -307,9 +307,8 @@ type Equalable interface {
 // otherwise compare pointers.
 func Equals(lhs, rhs Object) bool {
 	lhsEq, ok := lhs.(Equalable)
-	if ok {
-		return lhsEq.EqualsTo(rhs)
-	} else {
+	if !ok {
 		return lhs == rhs
 	}
+	return lhsEq.EqualsTo(rhs)
 }

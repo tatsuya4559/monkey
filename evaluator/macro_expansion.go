@@ -17,7 +17,7 @@ func DefineMacros(program *ast.Program, env *object.Environment) {
 	}
 
 	// remove macro definitions from ast
-	for i := len(definitions) - 1; i >= 0; i -= 1 {
+	for i := len(definitions) - 1; i >= 0; i-- {
 		definitionIndex := definitions[i]
 		program.Statements = append(
 			program.Statements[:definitionIndex],

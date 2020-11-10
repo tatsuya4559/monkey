@@ -302,8 +302,8 @@ type Equalable interface {
 	EqualsTo(Object) bool
 }
 
-// Equals returns the equality of argumets.
-// Invoke `EqualsTo` if argumets implements Equalable,
+// Equals returns the equality of arguments.
+// Invoke `EqualsTo` if arguments implements Equalable,
 // otherwise compare pointers.
 func Equals(lhs, rhs Object) bool {
 	lhsEq, ok := lhs.(Equalable)

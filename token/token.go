@@ -23,6 +23,7 @@ const (
 	MINUS    = "-"
 	ASTERISK = "*"
 	SLASH    = "/"
+	MOD      = "%"
 	BANG     = "!"
 
 	EQ     = "=="

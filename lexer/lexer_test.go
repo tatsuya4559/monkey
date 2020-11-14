@@ -33,6 +33,7 @@ if (5 < 10) {
 macro(x, y) { x + y; };
 while (true) { puts("foo") }; // comment
 // comment2
+12 % 3;
 `
 
 	tests := []struct {
@@ -153,6 +154,10 @@ while (true) { puts("foo") }; // comment
 		{token.SEMICOLON, ";"},
 		{token.COMMENT, "// comment"},
 		{token.COMMENT, "// comment2"},
+		{token.INT, "12"},
+		{token.MOD, "%"},
+		{token.INT, "3"},
+		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 

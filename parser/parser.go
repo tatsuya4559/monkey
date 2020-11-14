@@ -322,16 +322,9 @@ func (p *Parser) parseGroupExpression() ast.Expression {
 func (p *Parser) parseIfExpression() ast.Expression {
 	expr := &ast.IfExpression{Token: p.curToken}
 
-	if !p.expectPeek(token.LPAREN) {
-		return nil
-	}
-
+	// skip IF
 	p.nextToken()
 	expr.Condition = p.parseExpression(LOWEST)
-
-	if !p.expectPeek(token.RPAREN) {
-		return nil
-	}
 
 	if !p.expectPeek(token.LBRACE) {
 		return nil

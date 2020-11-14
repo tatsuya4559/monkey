@@ -1,6 +1,6 @@
 let map = fn(arr, f) {
 	let iter = fn(arr, acc) {
-		if (len(arr) == 0) {
+		if len(arr) == 0 {
 			acc
 		} else {
 			iter(rest(arr), push(acc, f(first(arr))));
@@ -12,10 +12,10 @@ let map = fn(arr, f) {
 
 let filter = fn(arr, f) {
 	let iter = fn(arr, acc) {
-		if (len(arr) == 0) {
+		if len(arr) == 0 {
 			acc
 		} else {
-			iter(rest(arr), if (f(first(arr))) { push(acc, first(arr)) } else { acc });
+			iter(rest(arr), if f(first(arr)) { push(acc, first(arr)) } else { acc });
 		}
 	};
 
@@ -24,7 +24,7 @@ let filter = fn(arr, f) {
 
 let reduce = fn(arr, initial, f) {
 	let iter = fn(arr, result) {
-		if (len(arr) == 0) {
+		if len(arr) == 0 {
 			result
 		} else {
 			iter(rest(arr), f(result, first(arr)));
@@ -40,7 +40,7 @@ let sum = fn(arr) {
 
 let unless = macro(cond, consequence, alternative) {
 	quote(
-		if (!(unquote(cond))) {
+		if !(unquote(cond)) {
 			unquote(consequence)
 		} else {
 			unquote(alternative)

@@ -96,7 +96,13 @@ func (p *Parser) peekError(t token.TokenType) {
 
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
-	p.peekToken = p.l.NextToken()
+
+	tok := p.l.NextToken()
+	// consume comments
+	for tok.Type == token.COMMENT {
+		tok = p.l.NextToken()
+	}
+	p.peekToken = tok
 }
 
 func (p *Parser) ParseProgram() *ast.Program {

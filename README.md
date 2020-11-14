@@ -5,3 +5,4 @@
 * while文の実装
 * // line comment
 * len()　のハッシュマップ対応
+* %演算子の実装

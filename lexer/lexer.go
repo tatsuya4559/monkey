@@ -57,7 +57,12 @@ func (l *Lexer) NextToken() token.Token {
 	case '*':
 		tok = newToken(token.ASTERISK, l.ch)
 	case '/':
-		tok = newToken(token.SLASH, l.ch)
+		if l.peekChar() == '/' {
+			tok.Literal = l.readComment()
+			tok.Type = token.COMMENT
+		} else {
+			tok = newToken(token.SLASH, l.ch)
+		}
 	case '!':
 		if l.peekChar() == '=' {
 			ch := l.ch
@@ -153,4 +158,15 @@ func (l *Lexer) peekChar() byte {
 		return 0
 	}
 	return l.input[l.readPosition]
+}
+
+func (l *Lexer) readComment() string {
+	position := l.position
+	for {
+		l.readChar()
+		if l.ch == '\n' || l.ch == 0 {
+			break
+		}
+	}
+	return l.input[position:l.position]
 }

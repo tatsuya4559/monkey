@@ -31,7 +31,8 @@ if (5 < 10) {
 [1, 2];
 {"foo": 12};
 macro(x, y) { x + y; };
-while (true) { puts("foo") };
+while (true) { puts("foo") }; // comment
+// comment2
 `
 
 	tests := []struct {
@@ -150,6 +151,8 @@ while (true) { puts("foo") };
 		{token.RPAREN, ")"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
+		{token.COMMENT, "// comment"},
+		{token.COMMENT, "// comment2"},
 		{token.EOF, ""},
 	}
 

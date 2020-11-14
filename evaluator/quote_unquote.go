@@ -57,6 +57,10 @@ func convertObjectToASTNode(obj object.Object) ast.Node {
 		}
 		return &ast.Boolean{Token: t, Value: obj.Value}
 
+	case *object.String:
+		t := token.Token{Type: token.STRING, Literal: obj.Value}
+		return &ast.StringLiteral{Token: t, Value: obj.Value}
+
 	case *object.Quote:
 		return obj.Node
 

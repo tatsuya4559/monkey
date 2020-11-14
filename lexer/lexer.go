@@ -1,16 +1,20 @@
 package lexer
 
-import "github.com/tatsuya4559/monkey/token"
+import (
+	"unicode"
+
+	"github.com/tatsuya4559/monkey/token"
+)
 
 type Lexer struct {
-	input        string
+	input        []rune
 	position     int  // current reading position
 	readPosition int  // next position to read
-	ch           byte // current reading character
+	ch           rune // current reading character
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input: input}
+	l := &Lexer{input: []rune(input)}
 	l.readChar()
 	return l
 }
@@ -110,16 +114,16 @@ func (l *Lexer) NextToken() token.Token {
 	return tok
 }
 
-func newToken(tokenType token.TokenType, ch byte) token.Token {
+func newToken(tokenType token.TokenType, ch rune) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch)}
 }
 
-func isLetter(ch byte) bool {
+func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
-func isDigit(ch byte) bool {
-	return '0' <= ch && ch <= '9'
+func isDigit(ch rune) bool {
+	return unicode.IsDigit(ch)
 }
 
 func (l *Lexer) skipWhitespace() {
@@ -133,7 +137,7 @@ func (l *Lexer) readIdentifier() string {
 	for isLetter(l.ch) {
 		l.readChar()
 	}
-	return l.input[position:l.position]
+	return string(l.input[position:l.position])
 }
 
 func (l *Lexer) readNumber() string {
@@ -141,7 +145,7 @@ func (l *Lexer) readNumber() string {
 	for isDigit(l.ch) {
 		l.readChar()
 	}
-	return l.input[position:l.position]
+	return string(l.input[position:l.position])
 }
 
 func (l *Lexer) readString() string {
@@ -152,10 +156,10 @@ func (l *Lexer) readString() string {
 			break
 		}
 	}
-	return l.input[position:l.position]
+	return string(l.input[position:l.position])
 }
 
-func (l *Lexer) peekChar() byte {
+func (l *Lexer) peekChar() rune {
 	if l.readPosition >= len(l.input) {
 		return 0
 	}
@@ -170,5 +174,5 @@ func (l *Lexer) readComment() string {
 			break
 		}
 	}
-	return l.input[position:l.position]
+	return string(l.input[position:l.position])
 }

@@ -27,12 +27,12 @@ if 5 < 10 {
 10 == 10;
 10 != 9;
 "foobar"
-"foo bar";
+"foo バー";
 [1, 2];
 {"foo": 12};
 macro(x, y) { x + y; };
 while (true) { puts("foo") }; // comment
-// comment2
+// 日本語コメント
 12 % 3;
 `
 
@@ -112,7 +112,7 @@ while (true) { puts("foo") }; // comment
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
 		{token.STRING, "foobar"},
-		{token.STRING, "foo bar"},
+		{token.STRING, "foo バー"},
 		{token.SEMICOLON, ";"},
 		{token.LBRACKET, "["},
 		{token.INT, "1"},
@@ -151,7 +151,7 @@ while (true) { puts("foo") }; // comment
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
 		{token.COMMENT, "// comment"},
-		{token.COMMENT, "// comment2"},
+		{token.COMMENT, "// 日本語コメント"},
 		{token.INT, "12"},
 		{token.MOD, "%"},
 		{token.INT, "3"},

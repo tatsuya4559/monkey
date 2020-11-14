@@ -391,6 +391,8 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`len([])`, 0},
 		{`len(["foo", "bar"])`, 2},
 		{`len([1, 2 * 3, 4 + 5 + 6, "foo"])`, 4},
+		{`len({"foo": 2, "bar": 0})`, 2},
+		{`len({})`, 0},
 		{`first([])`, nil},
 		{`first([1, 2])`, 1},
 		{`first([2 * 3, 4 + 5 + 6])`, 6},

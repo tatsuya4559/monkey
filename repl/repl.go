@@ -13,11 +13,11 @@ import (
 
 const PROMPT = ">> "
 const MONKEY_FACE = `
-　　　　／三ヽ
-　　　 /(( ‥|)
-　　 ／　( ┴)
-　～(　|| ノ||
-　　(_(∪)_)∪
+        ／三ヽ
+       /(( ‥|)
+     ／  ( ┴)
+  ～(  || ノ||
+    (_(∪)_)∪
 `
 
 func Start(in io.Reader, out io.Writer) {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/user"
 
@@ -25,7 +26,7 @@ func main() {
 func startREPL() {
 	user, err := user.Current()
 	if err != nil {
-		panic(err)
+		log.Fatalf("cannot get current user: %v", err)
 	}
 	fmt.Printf("Hello %s! This is the Monkey programming language!\n",
 		user.Username)
@@ -36,7 +37,7 @@ func startREPL() {
 func interpretFile(filename string) {
 	src, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		log.Fatalf("cannot read %s: %v", filename, err)
 	}
 
 	l := lexer.New(string(src))

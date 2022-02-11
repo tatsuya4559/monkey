@@ -118,8 +118,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for !p.curTokenIs(token.EOF) {
 		stmt, err := p.parseStatement()
-		// FIXME: stmtはast.Statementなのでnilにはならない。errorはerror型から返却すべし
-		// workaround: stmt != nil && !reflect.ValueOf(stmt).IsNil()
+		// FIXME: return error
 		if err == nil {
 			program.Statements = append(program.Statements, stmt)
 		}
@@ -237,12 +236,16 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 	p.errors = append(p.errors, msg)
 }
 
+func (p *Parser) newNoPrefixParseFnError(t token.TokenType) error {
+	return fmt.Errorf("no prefix parse function for %s found", t)
+}
+
 func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
+		// FIXME: remove p.errors
 		p.noPrefixParseFnError(p.curToken.Type)
-		// FIXME: return noprefixparseerror
-		return nil, nil
+		return nil, p.newNoPrefixParseFnError(p.curToken.Type)
 	}
 	leftExpr, err := prefix()
 	if err != nil {
@@ -277,8 +280,7 @@ func (p *Parser) parseIntegerLiteral() (ast.Expression, error) {
 	if err != nil {
 		msg := fmt.Sprintf("could not parse %q as integer", p.curToken.Literal)
 		p.errors = append(p.errors, msg)
-		// FIXME: return err
-		return nil, nil
+		return nil, fmt.Errorf("could not parse %q as integer", p.curToken.Literal)
 	}
 
 	lit.Value = value
@@ -401,9 +403,10 @@ func (p *Parser) parseBlockStatement() (*ast.BlockStatement, error) {
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 		stmt, err := p.parseStatement()
-		if err == nil {
-			block.Statements = append(block.Statements, stmt)
+		if err != nil {
+			return nil, err
 		}
+		block.Statements = append(block.Statements, stmt)
 		p.nextToken()
 	}
 

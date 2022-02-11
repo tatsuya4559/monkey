@@ -90,12 +90,6 @@ func (p *Parser) Errors() []string {
 	return p.errors
 }
 
-func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("expected next token to be %s, got %s instead",
-		t, p.peekToken.Type)
-	p.errors = append(p.errors, msg)
-}
-
 func (p *Parser) newPeekError(t token.TokenType) error {
 	return fmt.Errorf("expected next token to be %s, got %s instead",
 		t, p.peekToken.Type)
@@ -181,7 +175,6 @@ func (p *Parser) expectPeek(t token.TokenType) error {
 		p.nextToken()
 		return nil
 	}
-	p.peekError(t)
 	return p.newPeekError(t)
 }
 
@@ -231,11 +224,6 @@ func (p *Parser) parseExpressionStatement() (*ast.ExpressionStatement, error) {
 	return stmt, nil
 }
 
-func (p *Parser) noPrefixParseFnError(t token.TokenType) {
-	msg := fmt.Sprintf("no prefix parse function for %s found", t)
-	p.errors = append(p.errors, msg)
-}
-
 func (p *Parser) newNoPrefixParseFnError(t token.TokenType) error {
 	return fmt.Errorf("no prefix parse function for %s found", t)
 }
@@ -243,8 +231,6 @@ func (p *Parser) newNoPrefixParseFnError(t token.TokenType) error {
 func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
-		// FIXME: remove p.errors
-		p.noPrefixParseFnError(p.curToken.Type)
 		return nil, p.newNoPrefixParseFnError(p.curToken.Type)
 	}
 	leftExpr, err := prefix()
@@ -278,8 +264,6 @@ func (p *Parser) parseIntegerLiteral() (ast.Expression, error) {
 
 	value, err := strconv.ParseInt(p.curToken.Literal, 0, 64)
 	if err != nil {
-		msg := fmt.Sprintf("could not parse %q as integer", p.curToken.Literal)
-		p.errors = append(p.errors, msg)
 		return nil, fmt.Errorf("could not parse %q as integer", p.curToken.Literal)
 	}
 

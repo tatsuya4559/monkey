@@ -26,7 +26,7 @@ func Start(in io.Reader, out io.Writer) {
 	macroEnv := object.NewEnvironment()
 
 	for {
-		fmt.Printf(PROMPT)
+		fmt.Print(PROMPT)
 		scanned := scanner.Scan()
 		if !scanned {
 			return

@@ -33,10 +33,7 @@ func isMacroDefinition(stmt ast.Statement) bool {
 	}
 
 	_, ok = letStmt.Value.(*ast.MacroLiteral)
-	if !ok {
-		return false
-	}
-	return true
+	return ok
 }
 
 func addMacro(stmt ast.Statement, env *object.Environment) {

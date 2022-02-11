@@ -22,7 +22,10 @@ func TestLetStatements(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		if program == nil {
@@ -97,7 +100,10 @@ func TestReturnStatements(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
@@ -127,7 +133,10 @@ func TestIdentifierExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -151,7 +160,10 @@ func TestIntegerLiteralExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -185,7 +197,10 @@ func TestParsingPrefixExpressions(t *testing.T) {
 	for _, tt := range prefixTests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
@@ -255,7 +270,10 @@ func TestParsingInfixExpression(t *testing.T) {
 	for _, tt := range infixTests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
@@ -387,7 +405,10 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		actual := program.String()
@@ -471,7 +492,10 @@ func TestBooleanExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -513,7 +537,10 @@ func TestIfExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -561,7 +588,10 @@ func TestIfElseExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -619,7 +649,10 @@ func TestFunctionLiteralParsing(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	// FunctionLiteral
@@ -672,7 +705,10 @@ func TestFunctionParameterParsing(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		// do not check type conversion. it is tested above.
@@ -695,7 +731,10 @@ func TestCallExpressionParsing(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -741,7 +780,10 @@ func TestCallExpressionArgumentParsing(t *testing.T) {
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
 		p := New(l)
-		program := p.ParseProgram()
+		program, err := p.ParseProgram()
+		if err != nil {
+			t.Fatalf("parse error: %v", err)
+		}
 		checkParserErrors(t, p)
 
 		// do not check type conversion. it is tested above.
@@ -764,7 +806,10 @@ func TestStringLiteralExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -796,7 +841,10 @@ func TestParsingArrayLiteral(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -828,7 +876,10 @@ func TestParsingEmptyArray(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -856,7 +907,10 @@ func TestParsingIndexExpression(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -892,7 +946,10 @@ func TestParsingHashLiteralStringKey(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -932,7 +989,10 @@ func TestParsingEmptyHashLiteral(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -966,7 +1026,10 @@ func TestParsingHashLiteralIntegerKey(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -1010,7 +1073,10 @@ func TestParsingHashLiteralBooleanKey(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -1061,7 +1127,10 @@ func TestParsingHashLiteralWithExpressions(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
@@ -1105,7 +1174,10 @@ func TestMacroLiteralParsing(t *testing.T) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	// FunctionLiteral
@@ -1155,7 +1227,10 @@ while (i < 10) {
 
 	l := lexer.New(input)
 	p := New(l)
-	program := p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
 	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {

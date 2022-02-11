@@ -42,13 +42,11 @@ func interpretFile(filename string) {
 
 	l := lexer.New(string(src))
 	p := parser.New(l)
-	program := p.ParseProgram()
-	if len(p.Errors()) != 0 {
+	program, err := p.ParseProgram()
+	if err != nil {
 		io.WriteString(os.Stderr, "Woops! We ran into some monkey business here!\n")
-		io.WriteString(os.Stderr, " parser errors:\n")
-		for _, msg := range p.Errors() {
-			io.WriteString(os.Stderr, "\t"+msg+"\n")
-		}
+		io.WriteString(os.Stderr, " parser error:\n")
+		io.WriteString(os.Stderr, "\t"+err.Error()+"\n")
 		os.Exit(1)
 	}
 

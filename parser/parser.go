@@ -112,19 +112,19 @@ func (p *Parser) nextToken() {
 	p.peekToken = tok
 }
 
-func (p *Parser) ParseProgram() *ast.Program {
+func (p *Parser) ParseProgram() (*ast.Program, error) {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
 
 	for !p.curTokenIs(token.EOF) {
 		stmt, err := p.parseStatement()
-		// FIXME: return error
-		if err == nil {
-			program.Statements = append(program.Statements, stmt)
+		if err != nil {
+			return nil, err
 		}
+		program.Statements = append(program.Statements, stmt)
 		p.nextToken()
 	}
-	return program
+	return program, nil
 }
 
 func (p *Parser) parseStatement() (ast.Statement, error) {

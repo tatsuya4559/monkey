@@ -16,7 +16,7 @@ let function = fn(x, y) { x + y };
 let mymacro = macro(x, y) { x + y };
 `
 	env := object.NewEnvironment()
-	program := testParseProgram(input)
+	program := testParseProgram(t, input)
 
 	DefineMacros(program, env)
 
@@ -58,10 +58,15 @@ let mymacro = macro(x, y) { x + y };
 	}
 }
 
-func testParseProgram(input string) *ast.Program {
+func testParseProgram(t *testing.T, input string) *ast.Program {
+	t.Helper()
 	l := lexer.New(input)
 	p := parser.New(l)
-	return p.ParseProgram()
+	program, err := p.ParseProgram()
+	if err != nil {
+		t.Fatalf("parse error: %v", err)
+	}
+	return program
 }
 
 func TestExpandMacros(t *testing.T) {
@@ -101,8 +106,8 @@ func TestExpandMacros(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		expected := testParseProgram(tt.expected)
-		program := testParseProgram(tt.input)
+		expected := testParseProgram(t, tt.expected)
+		program := testParseProgram(t, tt.input)
 
 		env := object.NewEnvironment()
 		DefineMacros(program, env)

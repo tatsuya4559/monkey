@@ -270,9 +270,22 @@ func isTruthy(obj object.Object) bool {
 		return false
 	case NULL:
 		return false
-	default:
+	}
+
+	switch obj := obj.(type) {
+	case *object.Array:
+		if len(obj.Elements) == 0 {
+			return false
+		}
+		return true
+	case *object.Hash:
+		if len(obj.Pairs) == 0 {
+			return false
+		}
 		return true
 	}
+
+	return true
 }
 
 func newError(format string, a ...interface{}) *object.Error {

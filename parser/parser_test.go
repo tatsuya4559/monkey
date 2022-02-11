@@ -26,7 +26,6 @@ func TestLetStatements(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		if program == nil {
 			t.Fatalf("ParseProgram() returned nil")
@@ -74,19 +73,6 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	return true
 }
 
-func checkParserErrors(t *testing.T, p *Parser) {
-	errors := p.Errors()
-	if len(errors) == 0 {
-		return
-	}
-
-	t.Errorf("parser has %d errors", len(errors))
-	for _, msg := range errors {
-		t.Errorf("parser error: %q", msg)
-	}
-	t.FailNow()
-}
-
 func TestReturnStatements(t *testing.T) {
 	tests := []struct {
 		input         string
@@ -104,7 +90,6 @@ func TestReturnStatements(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
 			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
@@ -137,7 +122,6 @@ func TestIdentifierExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -164,7 +148,6 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -201,7 +184,6 @@ func TestParsingPrefixExpressions(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
 			t.Fatalf("program.Statements does not contain %d statements. got=%d",
@@ -274,7 +256,6 @@ func TestParsingInfixExpression(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
 			t.Fatalf("program.Statements does not contain %d statements. got=%d",
@@ -409,7 +390,6 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		actual := program.String()
 		if actual != tt.expected {
@@ -496,7 +476,6 @@ func TestBooleanExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -541,7 +520,6 @@ func TestIfExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -592,7 +570,6 @@ func TestIfElseExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -653,7 +630,6 @@ func TestFunctionLiteralParsing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	// FunctionLiteral
 	if len(program.Statements) != 1 {
@@ -709,7 +685,6 @@ func TestFunctionParameterParsing(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		// do not check type conversion. it is tested above.
 		stmt := program.Statements[0].(*ast.ExpressionStatement)
@@ -735,7 +710,6 @@ func TestCallExpressionParsing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -784,7 +758,6 @@ func TestCallExpressionArgumentParsing(t *testing.T) {
 		if err != nil {
 			t.Fatalf("parse error: %v", err)
 		}
-		checkParserErrors(t, p)
 
 		// do not check type conversion. it is tested above.
 		stmt := program.Statements[0].(*ast.ExpressionStatement)
@@ -810,7 +783,6 @@ func TestStringLiteralExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -845,7 +817,6 @@ func TestParsingArrayLiteral(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -880,7 +851,6 @@ func TestParsingEmptyArray(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -911,7 +881,6 @@ func TestParsingIndexExpression(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -950,7 +919,6 @@ func TestParsingHashLiteralStringKey(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -993,7 +961,6 @@ func TestParsingEmptyHashLiteral(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -1030,7 +997,6 @@ func TestParsingHashLiteralIntegerKey(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -1077,7 +1043,6 @@ func TestParsingHashLiteralBooleanKey(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -1131,7 +1096,6 @@ func TestParsingHashLiteralWithExpressions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",
@@ -1178,7 +1142,6 @@ func TestMacroLiteralParsing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	// FunctionLiteral
 	if len(program.Statements) != 1 {
@@ -1231,7 +1194,6 @@ while (i < 10) {
 	if err != nil {
 		t.Fatalf("parse error: %v", err)
 	}
-	checkParserErrors(t, p)
 
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d",

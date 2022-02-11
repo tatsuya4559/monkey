@@ -36,8 +36,7 @@ var precedence = map[token.TokenType]int{
 }
 
 type Parser struct {
-	l      *lexer.Lexer
-	errors []string
+	l *lexer.Lexer
 
 	curToken  token.Token
 	peekToken token.Token
@@ -47,10 +46,7 @@ type Parser struct {
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{
-		l:      l,
-		errors: []string{},
-	}
+	p := &Parser{l: l}
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
@@ -84,10 +80,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 	return p
-}
-
-func (p *Parser) Errors() []string {
-	return p.errors
 }
 
 func (p *Parser) newPeekError(t token.TokenType) error {

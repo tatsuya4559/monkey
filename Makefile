@@ -3,7 +3,7 @@ build:
 
 .PHONY: test
 test:
-	go test ./lexer ./ast ./parser ./object ./evaluator
+	go test ./...
 
 .PHONY: fmt
 fmt:
@@ -11,4 +11,4 @@ fmt:
 
 .PHONY: lint
 lint:
-	golint ./token ./lexer ./ast ./parser ./object ./evaluator
+	staticcheck ./...
